@@ -2,4 +2,4 @@
 
 这里介绍一种用python写的基于串口通信的上位机自动测试程序框架（简陋框架）。
 
-详细信息:
+详细信息:https://www.cnblogs.com/zjutlitao/p/9503525.html
