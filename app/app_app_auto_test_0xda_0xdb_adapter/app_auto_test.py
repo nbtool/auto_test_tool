@@ -45,7 +45,10 @@ class AUTO_PROCESS:
         i = 0
         str_len = len(str)
         cmd1 = ord(str[FRAME.CMD])
-       
+      
+        if cmd1 == 0x07:
+            return
+
         print bsp_system.get_time_stamp() ,
 
         if cmd1 == 0x08:
@@ -70,7 +73,7 @@ class AUTO_PROCESS:
         cmd_get_status_all = bytearray([0x55, 0xAA, 0x01, 0x08, 0x00, 0x09, 0xF0, 0x0D, 0x37, 0xAE, 0x00, 0xDA, 0x02, 0x01, 0x10, 0xE0])
         cmd_wifi_report_state = bytearray([0x55, 0xAA, 0x01, 0x03, 0x00, 0x01, 0x04, 0x08])
 
-        #ser.write(cmd_wifi_report_state); 
+        self.ser.write(cmd_wifi_report_state); 
        
         all_times = 0
         fail1_times = 0
@@ -83,7 +86,7 @@ class AUTO_PROCESS:
                 cmd_get_status_all[6] = np.random.randint(0, 0xFF) 
                 cmd_get_status_all[7] = np.random.randint(0, 0xFF) 
                 cmd_get_status_all[8] = np.random.randint(0, 0xFF) 
-                cmd_get_status_all[9] = 0x21
+                cmd_get_status_all[9] = 0x2D
                 cmd_get_status_all[12] = 0x04
                 cmd_get_status_all[13] = 0x01
                 cmd_get_status_all[15] = 0x00 
