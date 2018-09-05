@@ -12,5 +12,14 @@ def get_time_stamp():
     time_stamp = "[%s.%03d] " % (data_head, data_secs)
     return time_stamp
 
+def get_time_stamp_ms():
+    t = time.time()
+    return (int(round(t * 1000)))    #毫秒级时间戳
+
+def get_time_stamp_us():
+    t = time.time()
+    return (int(round(t * 1000000)))    #微秒级时间戳
+
+
 version = '0.1'
 
