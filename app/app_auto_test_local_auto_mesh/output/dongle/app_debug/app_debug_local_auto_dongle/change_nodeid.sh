@@ -1,6 +1,6 @@
 #!/bin/bash
 
-old_lightA_node_id="0x03A8"
+old_lightA_node_id="0x0410"
 old_pir_pub_address="0xC218"
 old_door_pub_address="0xC220"
 old_lum_pub_address="0xC228"

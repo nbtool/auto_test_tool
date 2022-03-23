@@ -55,7 +55,7 @@ def check_serial_enough():
         return usb,0
     
 
-def rrun(index,dev):
+def log(index,dev):
     global device
     global t_add_max, t_add_cut
     
@@ -69,9 +69,8 @@ def rrun(index,dev):
         if t_add_cut.print_log(index,line) == 1:
             print("device[",index,"]", line, end="")
 
-def run():
+def init_device(reset_en):
     global device
-    global t_add_max, t_add_cut
 
     device_usb,ret=check_serial_enough()
     if ret == 0:
@@ -84,22 +83,35 @@ def run():
         #os.set_blocking(dev.stdout.fileno(), False)
         
 
-        threading.Thread(target=rrun,args=(i,dev)).start()
+        threading.Thread(target=log,args=(i,dev)).start()
         
         time.sleep(0.2)   
         dev.stdin.write(str(device_usb[i])+"\n")    # chose ttyUSB 
         dev.stdin.write(device_exe_kind[i]+"\n")    # chose device kind
         dev.stdin.write("i\n")                      # init
-        #dev.stdin.write("r\n")                      # reset
-        dev.stdin.write("g\n")                      # get pub_address
+        
+        if reset_en == 1:
+            dev.stdin.write("r\n")                  # reset
+        else:    
+            dev.stdin.write("g\n")                  # get pub_address
         dev.stdin.flush()
 
         device.append(dev)
         
         time.sleep(1)
 
-    t_add_max = test_add_max([device[0],device[1]],0)
-    t_add_cut = test_add_cut([device[0],device[1]],1)
+
+def init():
+    global device
+    global t_add_max, t_add_cut
+
+    init_device(0)
+    t_add_max = test_add_max([device[0],device[1]],1)
+    t_add_cut = test_add_cut([device[0],device[1]],0)
+
+
+def run():
+    global device
 
     cur_dev_index = MAX_DEVICE_NUM
     while True:
@@ -128,4 +140,5 @@ def run():
             break       
 
 if __name__=='__main__':
+    init()
     run()
