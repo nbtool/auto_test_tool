@@ -13,6 +13,7 @@ import sys
 sys.path.append('./test_script/')
 from test_add_max import *  
 from test_add_cut import *
+from test_local_auto_rate import *
 
 # device_exe_path=["./output/dongle/bin/","./output/5light/bin/","./output/pir/bin/","./output/door/bin/","./output/lum/bin/"]
 # device_exe_kind=["D","5","p","d","l"]
@@ -20,5 +21,6 @@ from test_add_cut import *
 
 if __name__=='__main__':
 #    t_add_max = test_add_max()
-    t_add_cut = test_add_cut()
+#    t_add_cut = test_add_cut()
+    t_local_auto_rate = test_local_auto_rate()
 
