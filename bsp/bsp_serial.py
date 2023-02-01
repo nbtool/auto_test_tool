@@ -14,6 +14,7 @@ class bsp_serial:
         #com_num = subprocess.call(['ls','-a']+glob('/dev/ttyUSB*')) 
         ret=subprocess.Popen(['ls','-a']+glob('/dev/ttyUSB*'),shell=False,stdout=subprocess.PIPE,stderr=subprocess.STDOUT) 
         com=ret.stdout.read().rstrip().split('\n')
+        #com=ret.args[2:]
         num=len(com)
         
         if(num == 0):
@@ -21,13 +22,13 @@ class bsp_serial:
         
         com_use = com[0];
         if(num>1):
-            print com
+            print(com)
             index = int(raw_input("enter the num: "))
             if(index >= num):
                 return 0
             com_use = com[index]
 
-        print com_use
+        print(com_use)
 
         self.ser = serial.Serial(com_use,
                 baud_rate,
