@@ -30,7 +30,7 @@ class FRAME:
         str_len = len(str)
         while start_pos<str_len:
             pos = start_pos
-            if((ord(str[pos]) == 0xA5) and (pos!=str_len-1) and (ord(str[pos+1]) == 0xA5)):
+            if((ord(str[pos]) == 0xA5) and (pos!=str_len-1) and (ord(str[pos+1]) == 0x5A)):
                 break
             start_pos = start_pos+1
         

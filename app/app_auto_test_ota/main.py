@@ -13,11 +13,15 @@ import bsp_system
 
 CMD = {'WRITE':0x01,'READ':0x02}
 
-# A5 A5 00 CMD LEN1 LEN2 PAYLOAD(OFFSET 4BYTES + SIZE 2BYTES(MAX4K) + DATAS)
+# A5 5A 00 CMD LEN1 LEN2 PAYLOAD(OFFSET 4BYTES + SIZE 2BYTES(MAX4K) + DATAS)
 def cmd_send(cmd,offset,size,datas):
     global ser1
     global flag_send_ok
-    flag_send_ok = 0  
+    global flag_read_ok
+    if cmd == CMD['READ']:
+        flag_read_ok = 0
+    elif cmd == CMD['WRITE']:
+        flag_send_ok = 0  
     
     if datas == None:
         data_len = 0
@@ -28,7 +32,7 @@ def cmd_send(cmd,offset,size,datas):
     buff = bytearray(buff_len)
     
     buff[0] = 0xA5
-    buff[1] = 0xA5
+    buff[1] = 0x5A
     buff[2] = 0x00
     buff[3] = cmd
     buff[4] = (payload_len >> 8) & 0xFF
@@ -40,12 +44,17 @@ def cmd_send(cmd,offset,size,datas):
     buff[9] = offset & 0xFF
     buff[10] = (size >> 8) & 0xFF
     buff[11] = size & 0xFF
-   
-    if data_len != 0:
-        buff[12:data_len] = datas
+  
+    if datas != None:
+        index = 12
+        for x in datas:
+            buff[index] = x
+            index = index+1
 
     ser1.write(buff) 
-
+    #for x in buff:
+    #    print "%02X" % x,
+    #print(" ")
 
 
 def init():
@@ -54,20 +63,21 @@ def init():
 pre_offset = 0x00
 def analysis_cmd(str):
     global flag_send_ok
+    global flag_read_ok
     global pre_offset
 
     str_len = len(str)
     cmd = ord(str[3])
     if cmd == CMD['WRITE']:
         offset = ord(str[6])<<24 | ord(str[7])<<16 | ord(str[8])<<8 | ord(str[9]) 
-        print("%d %d" %(offset,pre_offset))
+        #print("%x %x" %(offset,pre_offset))
         if offset - pre_offset != 32:
             if pre_offset != 0:
                 print("ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         pre_offset = offset
             
-        print("WRITE:%d" %(offset))
+        print("WRITE:%x" %(offset))
         flag_send_ok = 1
     elif cmd == CMD['READ']:
         offset = ord(str[6])<<24 | ord(str[7])<<16 | ord(str[8])<<8 | ord(str[9]) 
@@ -80,6 +90,7 @@ def analysis_cmd(str):
             print(" %02x" %(ord(str[12+i]))),
             num = num + 1
         print(" ")
+        flag_read_ok = 1
     else:
         print("CMD ERROR")
 
@@ -111,7 +122,9 @@ def write_file(offset = 0x11009000, filepath = 'x.bin'):
     index = 0
     left = size
     data_len = 32
-    buff = bytearray(data_len)
+    buff = bytearray(32) 
+
+    fail = 0
 
     while left > 0:
         if flag_send_ok == 1:
@@ -119,21 +132,27 @@ def write_file(offset = 0x11009000, filepath = 'x.bin'):
                 data_len = left
             else:
                 data_len = 32
-
-            buff[0:data_len] = ba[index*32:data_len]
-            offset = 0x11009000 + index*32
-
+            
+            for i in range(data_len):
+                buff[i] = ba[index*32+i]
+            offset = 0x30000 + index*32
+            
             cmd_send(CMD['WRITE'],offset,data_len,buff)
-            #print("index:%04d left:%05d" %(index, left))
+            print("x-index:%04d left:%05d" %(index, left))
 
             left = left - data_len
             index = index + 1
+            fail = 0
         else:
+            fail = fail + 1
+            if fail > 8:
+                exit(0)
+
             cmd_send(CMD['WRITE'],offset,data_len,buff)
-            #print("index:%04d left:%05d" %(index, left))
+            print("y-index:%04d left:%05d" %(index, left))
 
-        time.sleep(0.03)
-
+        time.sleep(0.1)
+ 
 def auto_send():
     global ser1
     global sn
@@ -144,12 +163,16 @@ def auto_send():
         x = raw_input(">")   
         if x == "W":
             print("write")
+            offset = int(raw_input("|- input offset(hex):"), 0)
+            datas = map(int,raw_input("|- input datas(int):").split(','))
+            cmd_send(CMD['WRITE'],offset,len(datas),datas)
         elif x == "R":
             offset = int(raw_input("|- input offset(hex):"), 0)
             size = int(raw_input("|- input size(int <= 256):"), 0)
             cmd_send(CMD['READ'],offset,size,None)
         elif x == "WF":
-            write_file(0x11009000,"x.bin")
+            #write_file(0x11009000,"x.bin")
+            write_file(0x11030000,"x.bin")
         elif x == "Q":
             exit(1)
         else:
