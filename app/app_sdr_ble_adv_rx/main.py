@@ -5,7 +5,8 @@ import time
 import numpy as np
 import binascii
 
-from grc.gr_ble import gr_ble as gr_block
+#from grc.gr_ble import gr_ble as gr_block
+from grc_limesdr.gr_ble import gr_ble as gr_block
 
 sys.path.append('../../bsp')
 import bsp_zmq
