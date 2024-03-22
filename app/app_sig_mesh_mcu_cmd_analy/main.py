@@ -2,6 +2,7 @@
 # coding=utf-8
 
 import threading
+import app_frame
 import sys
 import time
 import numpy as np
@@ -56,7 +57,8 @@ sig_mesh_mcu_cmd_map = {
     0xBD:"sig model receive",
     0xBE:"vendor model send",
     0xBF:"vendor model reveive",
-    0xD1:"get time"
+0xD1:"get time",
+    0xFF:"bt's log"
 }
 
 # 带颜色的打印函数
@@ -74,60 +76,72 @@ def print_hexarray(buf,pos,len):
 
 def cmd_analy(buf):
     cmd = ord(buf[3])
-    len = ord(buf[5])
-    if sig_mesh_mcu_cmd_map[cmd] == "dp upload":
-        dpid = ord(buf[6])
-        dptype = ord(buf[7])
-        dplen = ord(buf[9])
-    
-        detail = "dpid=%x, dptype=%s, dplen=%d, value=[" % (dpid, dp_type_map[dptype], dplen)
-        print_color(COLOR_BLUE,sig_mesh_mcu_cmd_map[cmd] + "->" + detail,0)
+    len2 = ord(buf[5])
+    if cmd not in sig_mesh_mcu_cmd_map:
+        print "cmd -> 0x%x" %(cmd)       
+    elif sig_mesh_mcu_cmd_map[cmd] == "dp upload":
+        if len(buf) > 9:
+            dpid = ord(buf[6])
+            dptype = ord(buf[7])
+            dplen = ord(buf[9])
+        
+            detail = "dpid=0x%x, dptype=%s, dplen=%d, value=[" % (dpid, dp_type_map[dptype], dplen)
+            print_color(COLOR_BLUE,sig_mesh_mcu_cmd_map[cmd] + "->" + detail,0)
 
-        print_hexarray(buf,10,dplen)
-        print("]")
+            print_hexarray(buf,10,dplen)
+            print("]")
+        else:
+            print("ack")  
+    elif sig_mesh_mcu_cmd_map[cmd] == "mesh send":
+        if len(buf) > 11:
+            group_address = ord(buf[6])<<8 | ord(buf[7])
+            dpid = ord(buf[8])
+            dptype = ord(buf[9])
+            dplen = ord(buf[11])
+        
+            detail = "group_address=0x%x dpid=0x%x, dptype=%s, dplen=%d, value=[" % (group_address, dpid, dp_type_map[dptype], dplen)
+            print_color(COLOR_BLUE,sig_mesh_mcu_cmd_map[cmd] + "->" + detail,0)
+
+            print_hexarray(buf,12,dplen)
+            print("]")
+        else:
+            print("ack")
     else:
         print_color(COLOR_BLUE,sig_mesh_mcu_cmd_map[cmd])      
 
-def buf_print(buf):
+def analysis_cmd2(buf):
+    global total_num
+    global fail_times
+
     buf_len = len(buf)
-    i = 0
 
     print bsp_system.get_time_stamp() ,
-    print_hexarray(buf,0,buf_len)
-    
-    cmd_analy(buf)
+    if ord(buf[3]) == 0xFF:
+        print_color(COLOR_BLUE,"bt's log" + "->", 0)
+        print "%s" %(buf[6:-3]) 
+    else:
+        print_hexarray(buf,0,buf_len)
+        cmd_analy(buf)
     
 def ser_receive():
     global ser1
-
-    timestamp_pre = 0
-    buf = ""
+    global frame
 
     while 1<2:
         if ser1.iswaiting() > 0:
             x = ser1.read()
-       
-            timestamp_curr = bsp_system.get_time_stamp_us()
-            if timestamp_pre == 0:
-                timestamp_pre = timestamp_curr
-            elif timestamp_curr - timestamp_pre > 2000:
-#print " "
-                buf_print(buf)
-                buf = ""
-                timestamp_pre = 0
-            else:
-#print "%d" %(timestamp_curr-timestamp_pre),
-                timestamp_pre = timestamp_curr
-     
-            buf+=x
-
+            frame.insert_data(x)     
 
 ser1 = bsp_serial.bsp_serial(115200)
+frame = app_frame.FRAME(analysis_cmd2)      
 
 try:
     threads = [] 
     t1 = threading.Thread(target=ser_receive)
+    t2 = threading.Thread(target=frame.run)
+    
     threads.append(t1)
+    threads.append(t2)   
 
     for t in threads:
         t.setDaemon(True)
