@@ -1,0 +1,502 @@
+options:
+  parameters:
+    author: Jan Wagner
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: gr_ble
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Bluetooth LE Receiver
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: ble_base_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 2402e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 12]
+    rotation: 0
+    state: enabled
+- name: ble_channel
+  id: variable
+  parameters:
+    comment: ''
+    value: '12'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 12]
+    rotation: 0
+    state: enabled
+- name: ble_channel_spacing
+  id: variable
+  parameters:
+    comment: ''
+    value: 2e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [424, 12]
+    rotation: 0
+    state: enabled
+- name: cutoff_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 850e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 288.0]
+    rotation: 0
+    state: enabled
+- name: data_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 1e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [384, 100]
+    rotation: 0
+    state: enabled
+- name: duration_seconds
+  id: variable
+  parameters:
+    comment: ''
+    value: '300'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 180]
+    rotation: 0
+    state: enabled
+- name: freq
+  id: variable
+  parameters:
+    comment: ''
+    value: ble_base_freq+(ble_channel_spacing * ble_channel)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 180]
+    rotation: 0
+    state: enabled
+- name: freq_offset
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 100]
+    rotation: 0
+    state: enabled
+- name: gmsk_gain_mu
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.7'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 280.0]
+    rotation: 0
+    state: enabled
+- name: gmsk_mu
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [928, 280.0]
+    rotation: 0
+    state: enabled
+- name: gmsk_omega_limit
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.035'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 208.0]
+    rotation: 0
+    state: enabled
+- name: gmsk_sps
+  id: variable
+  parameters:
+    comment: ''
+    value: int(sample_rate/data_rate)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 100]
+    rotation: 0
+    state: enabled
+- name: iq_output
+  id: variable
+  parameters:
+    comment: ''
+    value: '"/dev/null"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 552.0]
+    rotation: 0
+    state: enabled
+- name: lowpass_filter
+  id: variable
+  parameters:
+    comment: ''
+    value: firdes.low_pass(1, sample_rate, cutoff_freq, transition_width)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 12]
+    rotation: 0
+    state: enabled
+- name: num_samples
+  id: variable
+  parameters:
+    comment: ''
+    value: duration_seconds*sample_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 180]
+    rotation: 0
+    state: enabled
+- name: rf_gain
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 100]
+    rotation: 0
+    state: enabled
+- name: sample_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '4000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [120, 180]
+    rotation: 0
+    state: enabled
+- name: squelch_threshold
+  id: variable
+  parameters:
+    comment: ''
+    value: '-90'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 288.0]
+    rotation: 0
+    state: enabled
+- name: transition_width
+  id: variable
+  parameters:
+    comment: ''
+    value: 300e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [672, 288.0]
+    rotation: 0
+    state: enabled
+- name: analog_simple_squelch
+  id: analog_simple_squelch_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: '0.1'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    threshold: squelch_threshold
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 368.0]
+    rotation: 0
+    state: enabled
+- name: blocks_file_sink_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: iq_output
+    type: complex
+    unbuffered: 'False'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [576, 624]
+    rotation: 0
+    state: enabled
+- name: blocks_head_0
+  id: blocks_head
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: int(num_samples)
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 472.0]
+    rotation: 0
+    state: enabled
+- name: digital_gfsk_demod_0
+  id: digital_gfsk_demod
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    freq_error: '0.0'
+    gain_mu: '0.175'
+    log: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mu: '0.5'
+    omega_relative_limit: '0.005'
+    samples_per_symbol: gmsk_sps
+    sensitivity: (numpy.pi*0.5)/gmsk_sps
+    verbose: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 352.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_lp
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: -freq_offset
+    comment: ''
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: sample_rate
+    taps: lowpass_filter
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 368.0]
+    rotation: 0
+    state: enabled
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import numpy
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 320.0]
+    rotation: 0
+    state: enabled
+- name: note_0
+  id: note
+  parameters:
+    alias: ''
+    comment: ''
+    note: "\u4F3C\u4E4E\u6536\u53D1\u5728\u4E00\u8D77\uFF0C\u53EA\u6709\u53D1\u6B63\
+      \u5E38\uFF0C\u6536\u5DE8\u5361"
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 652.0]
+    rotation: 0
+    state: enabled
+- name: soapy_plutosdr_sink_0
+  id: soapy_plutosdr_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bandwidth: '0.0'
+    center_freq: int(freq+freq_offset)
+    comment: ''
+    dev_args: ''
+    gain: '70'
+    samp_rate: '4000000'
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 572.0]
+    rotation: 0
+    state: disabled
+- name: soapy_plutosdr_source_0
+  id: soapy_plutosdr_source
+  parameters:
+    affinity: ''
+    agc: 'False'
+    alias: ''
+    bandwidth: '0.0'
+    center_freq: freq+freq_offset
+    comment: ''
+    dev_args: ''
+    gain: '70'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: sample_rate
+    type: fc32
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 472.0]
+    rotation: 0
+    state: enabled
+- name: unpacked_to_packed
+  id: blocks_unpacked_to_packed_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    bits_per_chunk: '1'
+    comment: ''
+    endianness: gr.GR_LSB_FIRST
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 384.0]
+    rotation: 0
+    state: enabled
+- name: zeromq_pub_sink_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:55555
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    pass_tags: 'False'
+    timeout: '100'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1224, 368.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:66666
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'False'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 552.0]
+    rotation: 0
+    state: disabled
+
+connections:
+- [analog_simple_squelch, '0', freq_xlating_fir_filter_lp, '0']
+- [blocks_head_0, '0', analog_simple_squelch, '0']
+- [blocks_head_0, '0', blocks_file_sink_0, '0']
+- [digital_gfsk_demod_0, '0', unpacked_to_packed, '0']
+- [freq_xlating_fir_filter_lp, '0', digital_gfsk_demod_0, '0']
+- [soapy_plutosdr_source_0, '0', blocks_head_0, '0']
+- [unpacked_to_packed, '0', zeromq_pub_sink_0, '0']
+- [zeromq_sub_source_0, '0', soapy_plutosdr_sink_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.11.0
