@@ -5,7 +5,7 @@ import sys
 import termios
 
 sys.path.append('../../bsp')
-import bsp_algorithm
+from bsp_algorithm import bsp_algorithm
 
 # Bluetooth LE constants and definitions
 BLE_PREAMBLE = '\xAA'

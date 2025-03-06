@@ -311,9 +311,28 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [256, 472.0]
+    coordinate: [312, 468.0]
     rotation: 0
     state: enabled
+- name: blocks_throttle_0
+  id: blocks_throttle
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: sample_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 532.0]
+    rotation: 0
+    state: disabled
 - name: digital_gfsk_demod_0
   id: digital_gfsk_demod
   parameters:
@@ -370,61 +389,6 @@ blocks:
     coordinate: [8, 320.0]
     rotation: 0
     state: enabled
-- name: note_0
-  id: note
-  parameters:
-    alias: ''
-    comment: ''
-    note: "\u4F3C\u4E4E\u6536\u53D1\u5728\u4E00\u8D77\uFF0C\u53EA\u6709\u53D1\u6B63\
-      \u5E38\uFF0C\u6536\u5DE8\u5361"
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [208, 652.0]
-    rotation: 0
-    state: enabled
-- name: soapy_plutosdr_sink_0
-  id: soapy_plutosdr_sink
-  parameters:
-    affinity: ''
-    alias: ''
-    bandwidth: '0.0'
-    center_freq: int(freq+freq_offset)
-    comment: ''
-    dev_args: ''
-    gain: '70'
-    samp_rate: '4000000'
-    type: fc32
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [208, 572.0]
-    rotation: 0
-    state: disabled
-- name: soapy_plutosdr_source_0
-  id: soapy_plutosdr_source
-  parameters:
-    affinity: ''
-    agc: 'False'
-    alias: ''
-    bandwidth: '0.0'
-    center_freq: freq+freq_offset
-    comment: ''
-    dev_args: ''
-    gain: '40'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_rate: sample_rate
-    type: fc32
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [16, 452.0]
-    rotation: 0
-    state: enabled
 - name: unpacked_to_packed
   id: blocks_unpacked_to_packed_xx
   parameters:
@@ -467,7 +431,7 @@ blocks:
 - name: zeromq_sub_source_0
   id: zeromq_sub_source
   parameters:
-    address: tcp://127.0.0.1:66666
+    address: tcp://127.0.0.1:5556
     affinity: ''
     alias: ''
     comment: ''
@@ -483,20 +447,21 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 552.0]
+    coordinate: [8, 448.0]
     rotation: 0
-    state: disabled
+    state: enabled
 
 connections:
 - [analog_simple_squelch, '0', freq_xlating_fir_filter_lp, '0']
 - [blocks_head_0, '0', analog_simple_squelch, '0']
 - [blocks_head_0, '0', blocks_file_sink_0, '0']
+- [blocks_throttle_0, '0', blocks_head_0, '0']
 - [digital_gfsk_demod_0, '0', unpacked_to_packed, '0']
 - [freq_xlating_fir_filter_lp, '0', digital_gfsk_demod_0, '0']
-- [soapy_plutosdr_source_0, '0', blocks_head_0, '0']
 - [unpacked_to_packed, '0', zeromq_pub_sink_0, '0']
-- [zeromq_sub_source_0, '0', soapy_plutosdr_sink_0, '0']
+- [zeromq_sub_source_0, '0', blocks_head_0, '0']
+- [zeromq_sub_source_0, '0', blocks_throttle_0, '0']
 
 metadata:
   file_format: 1
-  grc_version: 3.10.12.0
+  grc_version: 3.10.11.0

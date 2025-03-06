@@ -9,7 +9,8 @@ import zmq
 
 #from grc.gr_ble import gr_ble as gr_block
 #from grc_limesdr.gr_ble import gr_ble as gr_block
-from grc_plutosdr.gr_ble import gr_ble as gr_block
+#from grc_plutosdr.gr_ble import gr_ble as gr_block
+from grc_zmq.gr_ble import gr_ble as gr_block
 
 sys.path.append('../../bsp')
 import bsp_zmq

@@ -9,7 +9,7 @@ from glob import glob
 
 sys.path.append('../../bsp')
 from bsp_file import *
-from bsp_string import *
+from bsp_string import bsp_string
 
 from mesh_devices import *
 
@@ -75,9 +75,9 @@ class test_add_max:
 
             if len(line) == 0:
                 continue
-            if bsp_string_check_in_str(line,black_list) == 1:
+            if bsp_string.check_in_str(line,black_list) == 1:
                 continue
 
-            if bsp_string_check_in_str(line,white_list) == 1:
+            if bsp_string.check_in_str(line,white_list) == 1:
                 print("device[",index,"]", line, end="")
             
