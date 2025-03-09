@@ -8,8 +8,6 @@
 # Title: gr_ble_adv_tx
 # GNU Radio version: 3.10.12.0
 
-from gnuradio import blocks
-import pmt
 from gnuradio import gr
 from gnuradio.filter import firdes
 from gnuradio.fft import window
@@ -18,6 +16,7 @@ import signal
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from gnuradio import zeromq
 import osmosdr
 import time
 import threading
@@ -36,31 +35,29 @@ class gr_ble_adv_tx(gr.top_block):
         ##################################################
         self.tx_freq = tx_freq = 2402000000
         self.samp_rate = samp_rate = 4e6
-        self.IF = IF = 40
 
         ##################################################
         # Blocks
         ##################################################
 
+        self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:55556', 100, False, (-1), '')
         self.osmosdr_sink_0 = osmosdr.sink(
-            args="numchan=" + str(1) + " " + 'hackrf=0'
+            args="numchan=" + str(1) + " " + 'limesdr=000907060247100D'
         )
         self.osmosdr_sink_0.set_sample_rate(samp_rate)
         self.osmosdr_sink_0.set_center_freq(tx_freq, 0)
         self.osmosdr_sink_0.set_freq_corr(0, 0)
-        self.osmosdr_sink_0.set_gain(0, 0)
-        self.osmosdr_sink_0.set_if_gain(IF, 0)
-        self.osmosdr_sink_0.set_bb_gain(0, 0)
+        self.osmosdr_sink_0.set_gain(20, 0)
+        self.osmosdr_sink_0.set_if_gain(20, 0)
+        self.osmosdr_sink_0.set_bb_gain(20, 0)
         self.osmosdr_sink_0.set_antenna('', 0)
         self.osmosdr_sink_0.set_bandwidth(0, 0)
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, 'normalization_sample.bin', True, 0, 0)
-        self.blocks_file_source_0.set_begin_tag(pmt.intern("Begin"))
 
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_file_source_0, 0), (self.osmosdr_sink_0, 0))
+        self.connect((self.zeromq_sub_source_0, 0), (self.osmosdr_sink_0, 0))
 
 
     def get_tx_freq(self):
@@ -76,13 +73,6 @@ class gr_ble_adv_tx(gr.top_block):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.osmosdr_sink_0.set_sample_rate(self.samp_rate)
-
-    def get_IF(self):
-        return self.IF
-
-    def set_IF(self, IF):
-        self.IF = IF
-        self.osmosdr_sink_0.set_if_gain(self.IF, 0)
 
 
 
