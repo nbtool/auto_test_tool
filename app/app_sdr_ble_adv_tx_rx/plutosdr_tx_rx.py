@@ -15,6 +15,11 @@ import sys
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# 定义全局变量
+sdr = None
+zmq_manager = None
+threads = []
+
 # 定义配置类
 class Config:
     FREQUENCY = 2402e6  # 2.402 GHz
@@ -153,7 +158,8 @@ def signal_handler(sig, frame):
     safe_exit(sdr, zmq_manager, threads)
     sys.exit(0)
 
-if __name__ == "__main__":
+def sdr_tx_rx_start():
+    global sdr, zmq_manager, threads  # 声明使用全局变量
     try:
         sdr = setup_sdr()
         if sdr is None:
@@ -169,10 +175,15 @@ if __name__ == "__main__":
             t.start()
         # 注册信号处理函数
         signal.signal(signal.SIGINT, signal_handler)
-        # 主线程保持运行
-        while True:
-            time.sleep(1)
     except Exception as e:
         logging.error(f"An error occurred: {e}")
         if 'sdr' in locals() and sdr is not None:
             safe_exit(sdr, zmq_manager, threads)
+
+if __name__ == "__main__":
+    sdr_tx_rx_start()
+    # 主线程保持运行
+    while True:
+        time.sleep(1)
+
+

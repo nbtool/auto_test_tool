@@ -10,7 +10,7 @@ from bsp_algorithm import bsp_algorithm
 from bsp_string import bsp_string
 from bsp_signal import bsp_signal
 
-def gen_sample_from_phy_bit(bit):
+def gen_sample_from_phy_bit(bit, debug=False):
     # Constants
     MAX_NUM_PHY_BYTE = 47
     SAMPLE_PER_SYMBOL = 4
@@ -51,7 +51,7 @@ def gen_sample_from_phy_bit(bit):
 
     return sample
 
-def create_ll_payload(mac, adv_data, channel):
+def create_ll_payload(mac, adv_data, channel, debug = False):
     '''
     AA D6 BE 89 8E （preamble + access address)
     42 26 06 05 04 03 02 01  (PDU-Header + PDU-Payload-Adva)
@@ -87,8 +87,9 @@ def create_ll_payload(mac, adv_data, channel):
     ll_payload.extend(pdu_adv_crc_wt)
 
     # 打印
-    bsp_string.print_data_list_hex("> pre_wt_adv_pdu:", pdu_adv)
-    bsp_string.print_data_list_hex("\n> ll data final:", ll_payload)
+    if debug:
+        bsp_string.print_data_list_hex("> pre_wt_adv_pdu:", pdu_adv)
+        bsp_string.print_data_list_hex("\n> ll data final:", ll_payload)
 
 
     return ll_payload
@@ -128,19 +129,21 @@ def save_normalization_sample_to_hackrf_iq(ll_datas_normalization_sample, file_p
             f.write(struct.pack("b", Q_int))  # 写入 Q 分量（8位整数）
 
 
-def app_beacon_gen(mac, adv_datas, channel):
+def app_beacon_gen(mac, adv_datas, channel, debug = False):
 
     ll_datas = create_ll_payload(mac, adv_datas, channel)
 
     # bit 是广播包 42 Bytes 的 bits 表示（小端）
     ll_datas_bit = bsp_string.bytes_to_bits_lsb(ll_datas)
-    bsp_string.print_data_list_hex("\n> ll_datas_bit =",ll_datas_bit,line_item_num=40,seg_item_num=4)
+    if debug:
+        bsp_string.print_data_list_hex("\n> ll_datas_bit =",ll_datas_bit,line_item_num=40,seg_item_num=4)
     # ll_datas = bsp_string.bits_to_bytes_lsb(ll_datas_bit)
     # bsp_string.print_data_list_hex("\n> ll_datas =",ll_datas)
 
     ll_datas_sample = gen_sample_from_phy_bit(ll_datas_bit)
     # bsp_string.print_data_list("\n> ll_datas_sample(IQ datas)",ll_datas_sample,line_item_num=40)
-    bsp_string.print_data_list_hex("\n> ll_datas_sample(IQ datas)", ll_datas_sample, line_item_num=40, seg_item_num=4)
+    if debug:
+        bsp_string.print_data_list_hex("\n> ll_datas_sample(IQ datas)", ll_datas_sample, line_item_num=40, seg_item_num=4)
 
     ll_datas_normalization_sample = np.divide(ll_datas_sample, 256)
     return ll_datas_normalization_sample

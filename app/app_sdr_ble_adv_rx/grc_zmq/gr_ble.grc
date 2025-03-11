@@ -78,7 +78,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [584, 288.0]
+    coordinate: [688, 380.0]
     rotation: 0
     state: enabled
 - name: data_rate
@@ -138,7 +138,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 280.0]
+    coordinate: [928, 364.0]
     rotation: 0
     state: enabled
 - name: gmsk_mu
@@ -150,7 +150,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 280.0]
+    coordinate: [1032, 364.0]
     rotation: 0
     state: enabled
 - name: gmsk_omega_limit
@@ -162,7 +162,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 208.0]
+    coordinate: [928, 300.0]
     rotation: 0
     state: enabled
 - name: gmsk_sps
@@ -186,7 +186,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 552.0]
+    coordinate: [496, 548.0]
     rotation: 0
     state: enabled
 - name: lowpass_filter
@@ -246,7 +246,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 288.0]
+    coordinate: [496, 380.0]
     rotation: 0
     state: enabled
 - name: transition_width
@@ -258,7 +258,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [672, 288.0]
+    coordinate: [776, 380.0]
     rotation: 0
     state: enabled
 - name: analog_simple_squelch
@@ -275,7 +275,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 368.0]
+    coordinate: [496, 460.0]
     rotation: 0
     state: enabled
 - name: blocks_file_sink_0
@@ -293,7 +293,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 624]
+    coordinate: [496, 612.0]
     rotation: 0
     state: enabled
 - name: blocks_head_0
@@ -311,7 +311,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 468.0]
+    coordinate: [248, 468.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle_0
@@ -330,7 +330,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [192, 532.0]
+    coordinate: [152, 884.0]
     rotation: 0
     state: disabled
 - name: digital_gfsk_demod_0
@@ -353,7 +353,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 352.0]
+    coordinate: [928, 444.0]
     rotation: 0
     state: enabled
 - name: freq_xlating_fir_filter_lp
@@ -373,7 +373,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 368.0]
+    coordinate: [712, 460.0]
     rotation: 0
     state: enabled
 - name: import_0
@@ -386,7 +386,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 320.0]
+    coordinate: [16, 396.0]
     rotation: 0
     state: enabled
 - name: unpacked_to_packed
@@ -405,7 +405,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1032, 384.0]
+    coordinate: [1136, 476.0]
     rotation: 0
     state: enabled
 - name: zeromq_pub_sink_0
@@ -425,7 +425,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1224, 368.0]
+    coordinate: [1328, 460.0]
     rotation: 0
     state: true
 - name: zeromq_sub_source_0
@@ -447,7 +447,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 448.0]
+    coordinate: [16, 444.0]
     rotation: 0
     state: enabled
 
@@ -464,4 +464,4 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.11.0
+  grc_version: 3.10.12.0

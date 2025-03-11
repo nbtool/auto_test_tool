@@ -76,7 +76,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [216, 228.0]
+    coordinate: [232, 76.0]
     rotation: 0
     state: disabled
 - name: blocks_throttle_0
@@ -115,7 +115,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 236.0]
+    coordinate: [640, 236.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0
@@ -135,7 +135,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 236.0]
+    coordinate: [816, 236.0]
     rotation: 0
     state: enabled
 - name: zeromq_sub_source_0
@@ -157,7 +157,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [216, 132.0]
+    coordinate: [232, 236.0]
     rotation: 0
     state: enabled
 
@@ -169,4 +169,4 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.11.0
+  grc_version: 3.10.12.0
